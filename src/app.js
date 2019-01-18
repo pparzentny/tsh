@@ -1,6 +1,7 @@
 import './assets/scss/app.scss';
 import $ from 'cash-dom';
-
+import 'es6-promise/auto';
+import 'isomorphic-fetch';
 
 export class App {
   initializeApp() {
@@ -10,20 +11,23 @@ export class App {
       let userName = $('.username.input').val();
 
       fetch('https://api.github.com/users/' + userName)
-        .then((response)=> {response.json})
-        .then(function (body) {
-          self.profile = body;
-          self.update_profile();
+        .then(response => !response.ok ? Promise.reject(response.statusText) : response.json())
+        .then(body => {
+          const { name, avatar_url, html_url, login, bio } = body
+          self.update_profile(name, avatar_url, html_url, login, bio)
+        })
+        .catch((error) => {
+          console.log(error)
         })
 
     })
 
   }
 
-  update_profile() {
-    $('#profile-name').text($('.username.input').val())
-    $('#profile-image').attr('src', this.profile.avatar_url)
-    $('#profile-url').attr('href', this.profile.html_url).text(this.profile.login)
-    $('#profile-bio').text(this.profile.bio || '(no information)')
+  update_profile(name, avatar_url, html_url, login, bio) {
+    $('#profile-name').text(name)
+    $('#profile-image').attr('src', avatar_url)
+    $('#profile-url').attr('href', html_url).text(login)
+    $('#profile-bio').text(bio || '(no information)')
   }
 }
