@@ -1,21 +1,21 @@
-import './assets/scss/app.scss';
-import $ from 'cash-dom';
-import 'es6-promise/auto';
-import 'isomorphic-fetch';
-import {Template} from "./template";
+import './assets/scss/app.scss'
+import $ from 'cash-dom'
+import 'es6-promise/auto'
+import 'isomorphic-fetch'
+import {Template} from "./template"
 
 export class App {
   initializeApp() {
-    let self = this;
+    let self = this
 
     $('.load-username').on('click', function (e) {
-      const profileContainer = $('.profile-container');
-      const eventsContainer = $('.events-container');
-      const userName = $('.username.input');
-      const spinner = $('#spinner');
+      const profileContainer = $('.profile-container')
+      const eventsContainer = $('.events-container')
+      const userName = $('.username.input')
+      const spinner = $('#spinner')
 
-      profileContainer.addClass('is-hidden');
-      eventsContainer.addClass('is-hidden');
+      profileContainer.addClass('is-hidden')
+      eventsContainer.addClass('is-hidden')
 
       if(self.validation_field(userName)) {
         spinner.removeClass('is-hidden')
