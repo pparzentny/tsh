@@ -8,17 +8,19 @@ export class App {
     let self = this;
 
     $('.load-username').on('click', function (e) {
-      let userName = $('.username.input').val();
+      const userName = $('.username.input');
 
-      fetch('https://api.github.com/users/' + userName)
-        .then(response => !response.ok ? Promise.reject(response.statusText) : response.json())
-        .then(body => {
-          const { name, avatar_url, html_url, login, bio } = body
-          self.update_profile(name, avatar_url, html_url, login, bio)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      if(self.validation_field(userName)) {
+        fetch('https://api.github.com/users/' + userName.val())
+          .then(response => !response.ok ? Promise.reject(response.statusText) : response.json())
+          .then(body => {
+            const { name, avatar_url, html_url, login, bio } = body
+            self.update_profile(name, avatar_url, html_url, login, bio)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
 
     })
 
@@ -29,5 +31,17 @@ export class App {
     $('#profile-image').attr('src', avatar_url)
     $('#profile-url').attr('href', html_url).text(login)
     $('#profile-bio').text(bio || '(no information)')
+  }
+
+  validation_field(userName) {
+    userName.removeClass('is-danger')
+    
+    let regEx = /^[a-z0-9_-]+$/
+    if(!regEx.test(userName.val())) {
+      userName.addClass('is-danger')
+      return false
+    }
+
+    return true
   }
 }
