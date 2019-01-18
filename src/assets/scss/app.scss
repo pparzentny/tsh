@@ -18,3 +18,9 @@
 .timeline .timeline-item {
   padding-bottom:1em;
 }
+
+@media screen and (min-width: 1280px) {
+  .profile-container {
+    width: 30% !important;
+  }
+}
