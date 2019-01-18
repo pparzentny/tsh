@@ -9,14 +9,23 @@ export class App {
     let self = this;
 
     $('.load-username').on('click', function (e) {
+      const profileContainer = $('.profile-container');
+      const eventsContainer = $('.events-container');
       const userName = $('.username.input');
+      const spinner = $('#spinner');
+
+      profileContainer.addClass('is-hidden');
+      eventsContainer.addClass('is-hidden');
 
       if(self.validation_field(userName)) {
+        spinner.removeClass('is-hidden')
+
         fetch('https://api.github.com/users/' + userName.val())
           .then(response => !response.ok ? Promise.reject(response.statusText) : response.json())
           .then(body => {
             const { name, avatar_url, html_url, login, bio } = body
             self.update_profile(name, avatar_url, html_url, login, bio)
+            profileContainer.removeClass('is-hidden')
           })
           .then(() => {
             fetch('https://api.github.com/users/' + userName.val() + '/events/public')
@@ -26,10 +35,14 @@ export class App {
                 body.forEach(event => {
                     self.update_history(event)
                 })
+                eventsContainer.removeClass('is-hidden')
               })
           })
+          .finally(() => spinner.addClass('is-hidden'))
           .catch((error) => {
             console.log(error)
+            profileContainer.addClass('is-hidden')
+            eventsContainer.addClass('is-hidden')
           })
       }
 
