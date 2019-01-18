@@ -44,12 +44,12 @@ const config = {
             {
               loader: 'css-loader',
               options: {
-                sourceMap: true
+                sourceMap: false
               }
             }, {
               loader: 'sass-loader',
               options: {
-                sourceMap: true
+                sourceMap: false
               }
             }
           ],
@@ -90,7 +90,7 @@ const config = {
     open: true
   },
 
-  devtool: 'inline-source-map'
+  devtool: 'hidden-source-map'
 
 };
 
